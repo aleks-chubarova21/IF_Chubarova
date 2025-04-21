@@ -8,27 +8,24 @@ public class Main {
 
         List<Car> cars = new ArrayList<>();
 
-
-        cars.add(new Suzuki ("Suzuki Swift", "Coupe", "Black", 150, 2004, false, false));
-        cars.add(new Toyota ("Toyota Camry", "Sedan", "White", 140, 2004, false, true));
-        cars.add(new BMW ("BMW X5", "Hatchback", "Red", 150, 2005, false, false, 30));
-        cars.add(new Audi ("Audi A6", "Coupe", "Grey", 160, 2011, true, false));
-        cars.add(new Mazda ("Mazda RX", "Sport", "Green", 170, 2002, true, false));
-        cars.add(new Mazda ("Toyota RAV", "Sport", "Green", 170, 2011, true, false));
+        cars.add(new Suzuki (" Swift", "Coupe", "Black", 150, 2004, false, false));
+        cars.add(new Toyota (" Camry", "Sedan", "White", 140, 2004, false, true));
+        cars.add(new BMW (" X5", "Hatchback", "Red", 150, 2005, false, false, 30));
+        cars.add(new Audi (" A6", "Coupe", "Grey", 160, 2011, true, false));
+        cars.add(new Mazda (" RX", "Sport", "Green", 170, 2002, true, false));
+        cars.add(new Toyota (" RAV", "Sport", "Green", 170, 2011, true, false));
         cars.add(new Mazda ("Mazda RX2", "Sport", "Green", 170, 2002, true, false));
-        cars.add(new Mazda ("BMW X6", "Sport", "Pink", 170, 2020, true, false));
-        cars.add(new Mazda ("Mazda RX", "Sport", "Green", 170, 2007, true, false));
-        cars.add(new Mazda ("Audi A5", "Sport", "Green", 170, 2002, true, false));
+        cars.add(new BMW (" X6", "Sport", "Pink", 170, 2020, true, false, 60));
+        cars.add(new Mazda (" RX", "Sport", "Green", 170, 2007, true, false));
+        cars.add(new Audi (" A5", "Sport", "Green", 170, 2002, true, false));
 
         System.out.println("Полная информация:");
-        //car1.printlnFullInfo();
 
         System.out.println("________________");
         for (Car car : cars){
             car.printlnFullInfo();
             System.out.println("___________________");
         }
-
         System.out.println("________________");
 
         System.out.println("Изменение цвета");
@@ -41,10 +38,10 @@ public class Main {
 
         System.out.println("________________");
 
-        System.out.println("Замена с зеленого на красный");
-        for (Car car : cars){
-            car.changeGreenToRed();
+        for (Car car : cars) {
+            car.changeColor("Green", "Red");
         }
+
         System.out.println("________________");
 
         for (Car car : cars) {
@@ -53,18 +50,9 @@ public class Main {
 
         System.out.println("________________");
 
-
         System.out.println("Проверка года выпуска");
         CarUtils.printInfo(cars);
-
-
-
-
-
-
 
     }
 
 }
-
-

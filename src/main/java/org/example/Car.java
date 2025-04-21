@@ -33,12 +33,11 @@ public abstract class Car {
         System.out.println("Изменение цвета " + model + " с " + color + " на " + newColor);
         this.color = newColor;
 
-
     }
-    public void changeGreenToRed() {
-        if ("green".equalsIgnoreCase(this.color)) {
-            System.out.println("Меняем цвет " + this.model + " с зеленого на красный");
-            this.color = "Red";
+    public void changeColor(String oldColor, String newColor) {
+        if (this.color.equalsIgnoreCase(oldColor)) {
+            System.out.println("Меняем цвет " + this.model + " с " + oldColor + " на " + newColor);
+            this.color = newColor;
         }
     }
 
@@ -102,5 +101,3 @@ public abstract class Car {
     public abstract void printlnEngineInfo();
 
 }
-
-
