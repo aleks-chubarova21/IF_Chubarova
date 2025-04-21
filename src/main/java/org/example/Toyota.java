@@ -5,7 +5,7 @@ public class Toyota extends Car{
     private boolean isHybrid;
 
     public Toyota(String model, String type, String color, int hp, int year, boolean isAutomatic, boolean isHybrid) {
-        super(model, type, color, hp, year, isAutomatic);
+        super("Toyota" + model, type, color, hp, year, isAutomatic);
         this.isHybrid = isHybrid;
     }
 

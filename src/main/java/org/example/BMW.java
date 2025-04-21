@@ -5,7 +5,7 @@ public class BMW extends Car{
     private boolean isHybrid;
 
     public BMW(String model, String type, String color, int hp, int year, boolean isAutomatic, boolean isHybrid, int batteryCapacity) {
-        super(model, type, color, hp, year, isAutomatic);
+        super("BMW" + model, type, color, hp, year, isAutomatic);
         this.isHybrid = isHybrid;
         this.batteryCapacity = batteryCapacity;
     }
@@ -15,6 +15,5 @@ public class BMW extends Car{
         System.out.println("Тип двигателя: Электрический");
         System.out.println("Емкость батареи: " + batteryCapacity);
     }
-
 
 }
