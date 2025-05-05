@@ -3,66 +3,40 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Condition.*;
-import com.codeborne.selenide.Selenide;
+import java.time.Duration;
 
 public class BugCreatePage {
-    private final SelenideElement createButton = $x("//*[@id='create_link']")
-            .as("Кнопка Создать");
-    private final SelenideElement issueTypeField = $x("//input[@id='issuetype-field']")
-            .as("Поле типа задачи");
-    private final SelenideElement summaryField = $x("//*[@id='summary']")
-            .as("Тема задачи");
-    private final SelenideElement descriptionField = $x("//div[@id='description-wiki-edit']//textarea")
-            .as("Поле описания");
-    private final SelenideElement environmentField = $x("//div[@id='environment-wiki-edit']//textarea")
-            .as("Поле окружения");
-    private final SelenideElement versionField = $x("//select[@id='versions']")
-            .as("Поле версии");
-    private final SelenideElement createIssueButton = $x("//input[@id='create-issue-submit']")
-            .as("Кнопка Создать (подтверждение)");
-    private final SelenideElement closeNotificationButton = $x("//button[@title='Закрыть']")
-            .as("Кнопка закрытия уведомления");
-    private final SelenideElement taskCounter = $x("//div[@class='showing']//span")
-            .as("Счетчик задач");
+    private final SelenideElement createButton = $x("//*[@id='create_link']");
+    private final SelenideElement issueTypeField = $x("//input[@id='issuetype-field']");
+    private final SelenideElement summaryField = $x("//*[@id='summary']");
+    private final SelenideElement createIssueButton = $x("//input[@id='create-issue-submit']");
+
+    private final SelenideElement descriptionContainer = $x("//div[@id='description-wiki-edit']");
+    private final SelenideElement descriptionTextButton = descriptionContainer.$x(".//button[contains(., 'Текст')]");
+    private final SelenideElement descriptionField = descriptionContainer.$x(".//textarea");
+    private final SelenideElement environmentContainer = $x("//div[@id='environment-wiki-edit']");
+    private final SelenideElement environmentTextButton = environmentContainer.$x(".//button[contains(., 'Текст')]");
+    private final SelenideElement environmentField = environmentContainer.$x(".//textarea");
+    private final SelenideElement versionField = $x("//select[@id='versions']");
 
     public void createNewBug(String issueType, String summary, String description, String environment, String version) {
-        createButton.shouldBe(visible).click();
-        Selenide.sleep(1000); // Ждем открытия формы
+        createButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
 
-        issueTypeField.shouldBe(visible).setValue(issueType);
-        Selenide.sleep(500);
+        issueTypeField.shouldBe(interactable, Duration.ofSeconds(5)).setValue(issueType);
+        summaryField.shouldBe(interactable, Duration.ofSeconds(5)).setValue(summary);
 
-        summaryField.shouldBe(visible).setValue(summary);
-        Selenide.sleep(500);
+        switchToVisualMode(descriptionTextButton, "Описание");
+        descriptionField.shouldBe(interactable, Duration.ofSeconds(5)).setValue(description);
 
-        $x("//div[@id='description-wiki-edit']//button[contains(text(), 'Текст')]")
-                .shouldBe(visible).click();
-        Selenide.sleep(500);
+        switchToVisualMode(environmentTextButton, "Окружение");
+        environmentField.shouldBe(interactable, Duration.ofSeconds(10)).setValue(environment);
 
-        descriptionField.shouldBe(visible, enabled).setValue(description);
-        Selenide.sleep(500);
+        versionField.shouldBe(interactable, Duration.ofSeconds(10)).selectOption(version);
 
-        $x("//div[@id='environment-wiki-edit']//button[contains(text(), 'Текст')]")
-                .shouldBe(visible).click();
-        Selenide.sleep(500);
+        createIssueButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
 
-        environmentField.shouldBe(visible, enabled).setValue(environment);
-        Selenide.sleep(500);
-        
-        versionField.shouldBe(visible, enabled).selectOption(version);
-        Selenide.sleep(500);
-
-        createIssueButton.shouldBe(visible, enabled).click();
-        Selenide.sleep(3000);
-
-        closeTaskCreationNotification();
-        Selenide.refresh();
-        taskCounter.shouldBe(visible);
     }
-
-    private void closeTaskCreationNotification() {
-        if (closeNotificationButton.isDisplayed()) {
-            closeNotificationButton.click();
-        }
+    private void switchToVisualMode(SelenideElement textButton, String fieldName) {
+        textButton.shouldBe(visible, Duration.ofSeconds(10)).shouldBe(interactable).click();
     }
 }

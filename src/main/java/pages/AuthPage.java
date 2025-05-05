@@ -16,7 +16,6 @@ public class AuthPage {
         loginButton.shouldBe(visible).click();
         userProfileIcon.shouldBe(visible);
     }
-
     public boolean isUserLoggedIn() {
         return userProfileIcon.isDisplayed();
     }
