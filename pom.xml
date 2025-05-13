@@ -13,27 +13,18 @@
   <url>http://maven.apache.org</url>
 
   <properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <!-- Java 11 -->
-    <java.version>11</java.version>
-    <compiler.target.version>${java.version}</compiler.target.version>
-    <compiler.source.version>${java.version}</compiler.source.version>
-
-    <compiler.version>11</compiler.version>
+    <compiler.version>17</compiler.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <selenide.version>6.18.0</selenide.version>
-    <junit.platform.version>1.9.3</junit.platform.version>
-    <junit.jupiter.version>5.9.2</junit.jupiter.version>
-    <junit.vintage.version>5.9.2</junit.vintage.version>
     <restAssured.version>4.2.0</restAssured.version>
-    <cucumber.version>7.14.0</cucumber.version>
     <log4j.version>1.2.17</log4j.version>
     <log4jCore.version>2.13.2</log4jCore.version>
-    <aspectj.version>1.8.10</aspectj.version>
+    <aspectj.version>1.9.19</aspectj.version>
     <owner.version>1.0.10</owner.version>
     <jsch.version>0.1.55</jsch.version>
     <sshd-core.version>2.7.0</sshd-core.version>
@@ -42,8 +33,13 @@
     <allure.version>2.24.0</allure.version>
     <allure-maven.version>2.24.0</allure-maven.version>
     <json.version>20210307</json.version>
-
     <parallelCount>1</parallelCount>
+
+    <cucumber.version>7.14.0</cucumber.version>
+    <junit.platform.version>1.9.3</junit.platform.version>
+    <junit.jupiter.version>5.9.2</junit.jupiter.version>
+    <junit.vintage.version>5.9.2</junit.vintage.version>
+
   </properties>
 
 
@@ -73,6 +69,25 @@
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
       <version>${junit.platform.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
+      <version>${junit.platform.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit-platform-engine</artifactId>
+      <version>7.14.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.bonigarcia</groupId>
+      <artifactId>webdrivermanager</artifactId>
+      <version>5.9.2</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.qameta.allure</groupId>
@@ -139,24 +154,28 @@
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>1.8.10</version>
+      <version>${aspectj.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-nop</artifactId>
+      <version>2.0.13</version>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
           <encoding>UTF-8</encoding>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>17</source>
+          <target>17</target>
+          <compilerArgs>--enable-preview</compilerArgs>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -200,12 +219,25 @@
           </dependency>
         </dependencies>
       </plugin>
-
       <plugin>
         <groupId>io.qameta.allure</groupId>
         <artifactId>allure-maven</artifactId>
         <version>2.12.0</version>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <properties>
+            <configurationParameters>
+              cucumber.junit-platform.naming-strategy=long
+            </configurationParameters>
+          </properties>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
