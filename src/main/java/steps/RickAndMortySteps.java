@@ -1,63 +1,63 @@
 package steps;
 
-import api.RickAndMortyApi;
 import io.restassured.response.ValidatableResponse;
-import util.TestProperties;
-
-import java.util.List;
+import api.RickAndMortyApi;
+import config.Props;
+import org.aeonbits.owner.ConfigFactory;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.hasItem;
 
-public class RickAndMortySteps {
+public class RickAndMortySteps extends RickAndMortyApi {
+
+    private static ValidatableResponse makeGetRequest(String url) {
+        return given()
+                .spec(getBaseSpec())
+                .when()
+                .get(url)
+                .then()
+                .log().all();
+    }
 
     public static ValidatableResponse findMorty() {
+        Props props = ConfigFactory.create(Props.class);
         return given()
-                .spec(RickAndMortyApi.getBaseSpec())
-                .queryParam("name", TestProperties.getProperty("nameCharacterByRickAndMorty"))
+                .spec(getBaseSpec())
+                .queryParam("name", props.nameCharacterByRickAndMorty())
                 .when()
-                .get(TestProperties.getProperty("character.endpoint"))
-                .then();
+                .get(props.urlRickAndMorty() + "/character")
+                .then()
+                .log().all()
+                .assertThat()
+                .body("results.name", hasItem(props.nameCharacterByRickAndMorty()));
     }
 
-    public static ValidatableResponse getMortyById() {
-        ValidatableResponse response = findMorty();
+    public static ValidatableResponse getLastEpisodeDetails() {
+        ValidatableResponse mortyResponse = findMorty();
+        String[] episodeUrls = mortyResponse.extract().path("results[0].episode").toString().replace("[", "").replace("]", "").split(",");
 
-        System.out.println("\nИнформация по Морти");
-        System.out.println("Имя: " + response.extract().path("results[0].name"));
-        System.out.println("Местоположение: " + response.extract().path("results[0].location.name"));
-        System.out.println("Раса: " + response.extract().path("results[0].species"));
-        
-        return response;
+        if (episodeUrls.length > 0) {
+            String lastEpisodeUrl = episodeUrls[episodeUrls.length - 1].trim();
+            return makeGetRequest(lastEpisodeUrl);
+        }
+
+        return null;
     }
 
-    public static ValidatableResponse getLastEpisode() {
-        List<String> episodes = findMorty()
-                .extract()
-                .path("results[0].episode");
+    public static ValidatableResponse getLastCharacterFromLastEpisode() {
+        ValidatableResponse lastEpisodeResponse = getLastEpisodeDetails();
 
-        String lastEpisodeUrl = episodes.get(episodes.size() - 1);
+        if (lastEpisodeResponse == null) {
+            return null;
+        }
 
-        return given()
-                .spec(RickAndMortyApi.getBaseSpec())
-                .when()
-                .get(lastEpisodeUrl)
-                .then();
+        String[] characterUrls = lastEpisodeResponse.extract().path("characters").toString().replace("[", "").replace("]", "").split(",");
+        if (characterUrls.length > 0) {
+            String lastCharacterUrl = characterUrls[characterUrls.length - 1].trim();
+            return makeGetRequest(lastCharacterUrl);
+        }
+
+        return null;
     }
 
-    public static ValidatableResponse getLastCharacterLastEpisode() {
-        ValidatableResponse episodeResponse = getLastEpisode();
-        List<String> characters = episodeResponse.extract().path("characters");
-        String lastCharacterUrl = characters.get(characters.size() - 1);
-        String characterId = lastCharacterUrl.substring(lastCharacterUrl.lastIndexOf("/") + 1);
-
-        return given()
-                .spec(RickAndMortyApi.getBaseSpec())
-                .when()
-                .get(TestProperties.getProperty("character.endpoint") + "/" + characterId)
-                .then();
-    }
-
-    public static ValidatableResponse getLastCharacterInfo() {
-        return getLastCharacterLastEpisode();
-    }
 }

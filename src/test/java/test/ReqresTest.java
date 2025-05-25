@@ -1,30 +1,28 @@
 package test;
 
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import steps.ReqresSteps;
-import util.TestProperties;
-
-import static org.hamcrest.Matchers.*;
+import config.Props;
+import org.aeonbits.owner.ConfigFactory;
 
 public class ReqresTest {
+    private static final Props props = ConfigFactory.create(Props.class);
 
     @Test
     @DisplayName("Создание пользователя и проверка ответа")
     public void testCreateUser() {
         ValidatableResponse response = ReqresSteps.createUser();
+        Assertions.assertNotNull(response, "Ответ не должен быть null");
 
-        System.out.println("\nСоздание пользователя:");
-        System.out.println("Имя: " + TestProperties.getProperty("newName"));
-        System.out.println("Работа: " + TestProperties.getProperty("newJob"));
-        System.out.println("URL запроса: " + TestProperties.getProperty("baseUrlReqRes") + 
-                          TestProperties.getProperty("postUrlReqRes"));
+        String name = response.extract().path("name");
+        String job = response.extract().path("job");
+        int statusCode = response.extract().statusCode();
 
-        response
-                .statusCode(Integer.parseInt(TestProperties.getProperty("statusCodeReqRes")))
-                .body("name", equalTo(TestProperties.getProperty("newName")))
-                .body("job", equalTo(TestProperties.getProperty("newJob")));
-
+        Assertions.assertEquals(props.newName(), name, "Имя пользователя должно совпадать");
+        Assertions.assertEquals(props.newJob(), job, "Работа пользователя должна совпадать");
+        Assertions.assertEquals(Integer.parseInt(props.statusCodeReqRes()), statusCode, "Статус код должен совпадать");
     }
 }
