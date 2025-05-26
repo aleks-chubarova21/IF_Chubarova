@@ -1,42 +1,4 @@
-# Игнорировать всё
-*
-.idea/
-*.iml
-out/
-
-
-# Не игнорировать нужные файлы и папки
-!src/
-!pom.xml
-!README.md
-!.gitignore
-
-# Игнорировать всё внутри src, кроме исходного кода
-src/*
-!src/main/
-!src/test/
-
-# Игнорировать всё внутри main и test, кроме java и resources
-src/main/*
-!src/main/java/
-!src/main/resources/
-
-src/test/*
-!src/test/java/
-!src/test/resources/
-
-# Игнорировать скомпилированные файлы
-*.class
-*.jar
-*.war
-*.ear
-
-# Игнорировать логи и временные файлы
-*.log
-*.tmp
-*.temp
-
-# Игнорировать файлы IDE
+# Файлы IDE
 .idea/
 *.iml
 *.iws
@@ -46,7 +8,30 @@ src/test/*
 .classpath
 .project
 
-# Игнорировать файлы сборки
+# Файлы сборки
 target/
 build/
 out/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.temp
+*.cache
+
+# Исключения для исходного кода
+!src/main/java/
+!src/main/resources/
+!src/test/java/
+!src/test/resources/
+
+# Важные файлы проекта
+!pom.xml
+!README.md
+!.gitignore
+!*.md
