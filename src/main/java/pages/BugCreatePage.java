@@ -1,6 +1,7 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Condition.*;
 import java.time.Duration;
@@ -19,6 +20,7 @@ public class BugCreatePage {
     private final SelenideElement environmentField = environmentContainer.$x(".//textarea");
     private final SelenideElement versionField = $x("//select[@id='versions']");
 
+    @Step("Создание нового бага")
     public void createNewBug(String issueType, String summary, String description, String environment, String version) {
         createButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
 
@@ -36,7 +38,12 @@ public class BugCreatePage {
         createIssueButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
 
     }
+
+    @Step("Переключение режима редактирования для поля {fieldName}")
     private void switchToVisualMode(SelenideElement textButton, String fieldName) {
-        textButton.shouldBe(visible, Duration.ofSeconds(10)).shouldBe(interactable).click();
+        textButton.shouldBe(visible, Duration.ofSeconds(10))
+                .shouldBe(interactable)
+                .click();
+        System.out.println("Переключен режим для поля: " + fieldName);
     }
 }

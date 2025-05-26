@@ -1,6 +1,7 @@
 package pages;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Condition.*;
@@ -13,18 +14,20 @@ public class TaskPage {
     private final SelenideElement inProgressButton = $x("//span[text()='В работе']/ancestor::a");
     private final SelenideElement doneButton = $x("//span[text()='Выполнено']/ancestor::a");
 
-
+    @Step("Перевод задачи в статус 'В работе'")
     public void clickInProgressButton() {
         inProgressButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
         statusField.shouldHave(text("В РАБОТЕ"), Duration.ofSeconds(10));
     }
 
+    @Step("Перевод задачи в статус 'Готово' через бизнес-процесс")
     public void clickBusinessProcessAndDone() {
         businessProcessButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
         doneButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
         statusField.shouldHave(text("ГОТОВО"), Duration.ofSeconds(15));
     }
 
+    @Step("Проверка текущего статуса задачи")
     public boolean verifyCurrentStatus(String expectedStatus) {
         return currentStatus.shouldBe(visible, Duration.ofSeconds(5)).getText().equals(expectedStatus);
     }

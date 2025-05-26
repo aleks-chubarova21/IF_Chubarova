@@ -1,6 +1,8 @@
 package pages;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Condition.visible;
 
@@ -10,12 +12,20 @@ public class AuthPage {
     private final SelenideElement loginButton = $x("//input[@id='login-form-submit']");
     private final SelenideElement userProfileIcon = $x("//a[@id='header-details-user-fullname']");
 
+    @Step("Открытие страницы")
+    public void open(String url) {
+        Selenide.open(url);
+    }
+
+    @Step("Авторизация пользователя")
     public void login(String username, String password) {
         usernameInput.shouldBe(visible).setValue(username);
         passwordInput.shouldBe(visible).setValue(password);
         loginButton.shouldBe(visible).click();
         userProfileIcon.shouldBe(visible);
     }
+
+    @Step("Проверка успешной аутентификации")
     public boolean isUserLoggedIn() {
         return userProfileIcon.isDisplayed();
     }

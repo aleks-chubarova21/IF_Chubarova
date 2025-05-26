@@ -2,6 +2,7 @@ package pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$x;
 import java.time.Duration;
 
@@ -15,11 +16,13 @@ public class ProjectPage {
     private final SelenideElement searchInput = $x("//input[@id='quickSearchInput']")
             .as("Поле поиска");
 
+    @Step("Открытие проекта Test")
     public void openTestProject() {
         projectsMenu.shouldBe(Condition.visible, Duration.ofSeconds(10)).click();
         testProjectLink.shouldBe(Condition.visible, Duration.ofSeconds(10)).click();
     }
 
+    @Step("Поиск задачи")
     public void searchForTask(String taskName) {
         searchInput.shouldBe(Condition.visible, Duration.ofSeconds(10)).setValue(taskName).pressEnter();
     }
