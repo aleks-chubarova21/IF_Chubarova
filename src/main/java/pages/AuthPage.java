@@ -6,6 +6,7 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Condition.visible;
 
+
 public class AuthPage {
     private final SelenideElement usernameInput = $x("//input[@id='login-form-username']");
     private final SelenideElement passwordInput = $x("//input[@id='login-form-password']");
@@ -17,10 +18,10 @@ public class AuthPage {
         Selenide.open(url);
     }
 
-    @Step("Авторизация пользователя")
+    @Step("Авторизация пользователя '{username}'")
     public void login(String username, String password) {
         usernameInput.shouldBe(visible).setValue(username);
-        passwordInput.shouldBe(visible).setValue(password);
+        passwordInput.shouldBe(visible).sensitive().setValue(password);
         loginButton.shouldBe(visible).click();
         userProfileIcon.shouldBe(visible);
     }

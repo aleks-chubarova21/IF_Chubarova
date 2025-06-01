@@ -10,19 +10,28 @@ import io.qameta.allure.Story;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import pages.AuthPage;
 import static com.codeborne.selenide.Selenide.open;
 import static util.TestProperties.getProperty;
 
 @Feature("Настройка тестового окружения")
 public class WebHooks {
+    @BeforeAll
+    public static void setUpAllure() {
+        boolean screenshots = Boolean.parseBoolean(getProperty("allure.screenshots"));
+        boolean savePageSource = Boolean.parseBoolean(getProperty("allure.savePageSource"));
 
+        SelenideLogger.addListener("AllureSelenide",
+                new AllureSelenide()
+                        .screenshots(screenshots)
+                        .savePageSource(savePageSource)
+        );
+    }
     @BeforeEach
     @Story("Подготовка окружения")
     @Description("Настройка браузера и авторизация в системе")
     public void setUp() {
-        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
-        
         Configuration.browser = "chrome";
         Configuration.timeout = 10000;
         Configuration.headless = false;
