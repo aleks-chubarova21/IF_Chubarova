@@ -18,10 +18,10 @@ public class AuthPage {
         Selenide.open(url);
     }
 
-    @Step("Авторизация пользователя '{username}'")
+    @Step("Авторизация пользователя")
     public void login(String username, String password) {
         usernameInput.shouldBe(visible).setValue(username);
-        passwordInput.shouldBe(visible).sensitive().setValue(password);
+        passwordInput.shouldBe(visible).setValue(password).sensitive();
         loginButton.shouldBe(visible).click();
         userProfileIcon.shouldBe(visible);
     }
