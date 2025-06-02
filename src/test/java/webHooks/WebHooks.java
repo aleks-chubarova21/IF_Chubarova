@@ -17,6 +17,10 @@ import static util.TestProperties.getProperty;
 
 @Feature("Настройка тестового окружения")
 public class WebHooks {
+    private static final String BROWSER = "chrome";
+    private static final int TIMEOUT = 10000;
+    private static final boolean HEADLESS = false;
+
     @BeforeAll
     public static void setUpAllure() {
         boolean screenshots = Boolean.parseBoolean(getProperty("allure.screenshots"));
@@ -27,19 +31,23 @@ public class WebHooks {
                         .screenshots(screenshots)
                         .savePageSource(savePageSource)
         );
+
+        configureSelenide();
     }
+
+    private static void configureSelenide() {
+        Configuration.browser = BROWSER;
+        Configuration.timeout = TIMEOUT;
+        Configuration.headless = HEADLESS;
+        Configuration.reportsFolder = "target/selenide-reports";
+    }
+
     @BeforeEach
     @Story("Подготовка окружения")
     @Description("Настройка браузера и авторизация в системе")
     public void setUp() {
-        Configuration.browser = "chrome";
-        Configuration.timeout = 10000;
-        Configuration.headless = false;
-
         open(getProperty("url"));
-
         WebDriverRunner.getWebDriver().manage().window().maximize();
-
         new AuthPage().login(getProperty("login"), getProperty("password"));
     }
 

@@ -5,7 +5,6 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Condition.*;
-import java.time.Duration;
 
 public class TaskPage {
     private final SelenideElement statusField = $x("//span[@id='status-val']");
@@ -16,19 +15,19 @@ public class TaskPage {
 
     @Step("Перевод задачи в статус 'В работе'")
     public void clickInProgressButton() {
-        inProgressButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
-        statusField.shouldHave(text("В РАБОТЕ"), Duration.ofSeconds(10));
+        inProgressButton.shouldBe(interactable).click();
+        statusField.shouldHave(text("В РАБОТЕ"));
     }
 
     @Step("Перевод задачи в статус 'Готово' через бизнес-процесс")
     public void clickBusinessProcessAndDone() {
-        businessProcessButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
-        doneButton.shouldBe(interactable, Duration.ofSeconds(10)).click();
-        statusField.shouldHave(text("ГОТОВО"), Duration.ofSeconds(15));
+        businessProcessButton.shouldBe(interactable).click();
+        doneButton.shouldBe(interactable).click();
+        statusField.shouldHave(text("ГОТОВО"));
     }
 
     @Step("Проверка текущего статуса задачи")
     public boolean verifyCurrentStatus(String expectedStatus) {
-        return currentStatus.shouldBe(visible, Duration.ofSeconds(5)).getText().equals(expectedStatus);
+        return currentStatus.shouldBe(visible).getText().equals(expectedStatus);
     }
 }

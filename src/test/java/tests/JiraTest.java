@@ -4,17 +4,14 @@ import webHooks.WebHooks;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
-import io.qameta.allure.Epic;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pages.*;
-import com.codeborne.selenide.Selenide;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.codeborne.selenide.Selenide.refresh;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Epic("Тестирование")
-@Feature("Тестирование Jira")
+@Feature("Работа с задачами в Jira")
 public class JiraTest extends WebHooks {
-
     private final AuthPage authPage = new AuthPage();
     private final ProjectPage projectPage = new ProjectPage();
     private final TestProjectPage testProjectPage = new TestProjectPage();
@@ -22,81 +19,80 @@ public class JiraTest extends WebHooks {
     private final TestTaskPage testTaskPage = new TestTaskPage();
     private final TaskPage taskPage = new TaskPage();
 
-    private final String EXISTING_TASK = "TestSeleniumATHomework";
-    private final String NEW_TASK_TITLE = "TestTestTest";
-    private final String TASK_DESCRIPTION = "Описание бага";
-    private final String ENVIRONMENT = "Windows 11";
-    private final String BUG_TYPE = "Ошибка";
-    private final String VERSION = "Version 2.0";
-    private final String TO_DO_STATUS = "СДЕЛАТЬ";
-    private final String IN_PROGRESS_STATUS = "В РАБОТЕ";
-    private final String DONE_STATUS = "ГОТОВО";
+    private static final String TO_DO = "СДЕЛАТЬ";
+    private static final String IN_PROGRESS = "В РАБОТЕ";
+    private static final String DONE = "ГОТОВО";
 
+    private static final String EXISTING_TASK = "TestSeleniumATHomework";
+    private static final String NEW_TASK_TITLE = "TestTestTest";
+    private static final String TASK_DESCRIPTION = "Описание бага";
+    private static final String ENVIRONMENT = "Windows 11";
+    private static final String BUG_TYPE = "Ошибка";
+    private static final String VERSION = "Version 2.0";
+
+    @Test
     @DisplayName("Проверка успешной аутентификации")
     @Story("Авторизация")
     @Description("Проверка успешной аутентификации")
-    @Test
-    public void verifySuccessfulAuth() {
+    void verifySuccessfulAuth() {
         assertTrue(authPage.isUserLoggedIn(), "Пользователь не авторизован");
     }
 
+    @Test
     @DisplayName("Открытие проекта Test")
     @Story("Работа с проектом")
     @Description("Открытие проекта Test")
-    @Test
-    public void goToTestProject() {
+    void openTestProject() {
         projectPage.openTestProject();
         testProjectPage.verifyProjectOpened();
     }
 
+    @Test
     @DisplayName("Проверка общего количества задач в проекте")
     @Story("Работа с проектом")
     @Description("Проверка общего количества задач в проекте")
-    @Test
-    public void checkTasksCount() {
+    void verifyTasksCount() {
         projectPage.openTestProject();
         testProjectPage.verifyProjectOpened();
-        int taskCount = testProjectPage.getTasksCount();
-        assertTrue(taskCount > 0, "Количество задач должно быть больше 0");
+        assertTrue(testProjectPage.getTasksCount() > 0, "Количество задач должно быть больше 0");
     }
 
+    @Test
     @DisplayName("Проверка статуса и версии задачи")
     @Story("Проверка задач")
     @Description("Проверка статуса и версии задачи")
-    @Test
-    public void checkTestSeleniumTask() {
+    void verifyTaskDetails() {
         projectPage.searchForTask(EXISTING_TASK);
-        testTaskPage.verifyTaskDetails(EXISTING_TASK, TO_DO_STATUS, VERSION);
+        testTaskPage.verifyTaskDetails(EXISTING_TASK, TO_DO, VERSION);
     }
 
+    @Test
     @DisplayName("Создание нового бага и проверка счетчика")
     @Story("Создание задач")
     @Description("Создание нового бага и проверка счетчика")
-    @Test
-    public void createNewBugAndVerifyCount() {
+    void createBugAndVerifyCounter() {
         projectPage.openTestProject();
-        int startNumTask = testProjectPage.getTasksCount();
+        int initialCount = testProjectPage.getTasksCount();
 
         bugCreatePage.createNewBug(BUG_TYPE, NEW_TASK_TITLE, TASK_DESCRIPTION, ENVIRONMENT, VERSION);
 
-        Selenide.refresh();
-        int endNumTask = testProjectPage.getTasksCount();
-        assertTrue(endNumTask > startNumTask, "количество задач должно увеличиться");
+        refresh();
+        assertEquals(initialCount + 1, testProjectPage.getTasksCount(), "Количество задач должно увеличиться на 1");
     }
 
+    @Test
     @DisplayName("Перевод бага по статусам до закрытия")
     @Story("Управление задачами")
     @Description("Перевод бага по статусам до закрытия")
-    @Test
-    public void transitionBugThroughStatuses() {
+    void transitionBugStatuses() {
         projectPage.searchForTask(NEW_TASK_TITLE);
 
-        assertTrue(taskPage.verifyCurrentStatus(TO_DO_STATUS), "Начальный статус не 'СДЕЛАТЬ'");
+        assertTrue(taskPage.verifyCurrentStatus(TO_DO), "Начальный статус должен быть 'СДЕЛАТЬ'");
 
         taskPage.clickInProgressButton();
-        assertTrue(taskPage.verifyCurrentStatus(IN_PROGRESS_STATUS), "Статус не изменился на 'В РАБОТЕ'");
+        assertTrue(taskPage.verifyCurrentStatus(IN_PROGRESS), "Статус должен измениться на 'В РАБОТЕ'");
 
         taskPage.clickBusinessProcessAndDone();
-        assertTrue(taskPage.verifyCurrentStatus(DONE_STATUS), "Статус не изменился на 'ГОТОВО'");
+        assertTrue(taskPage.verifyCurrentStatus(DONE), "Статус должен измениться на 'ГОТОВО'");
     }
 }

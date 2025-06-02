@@ -1,17 +1,19 @@
 package util;
 
+import java.io.InputStream;
 import java.util.Properties;
-
 
 public class TestProperties {
     private static final Properties props = new Properties();
 
     static {
-        try {
-            props.load(TestProperties.class.getClassLoader()
-                    .getResourceAsStream("test.properties"));
+        try (InputStream input = TestProperties.class
+                .getClassLoader()
+                .getResourceAsStream("test.properties")) {
+
+            props.load(input);
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка загрузки test.properties", e);
+            throw new RuntimeException("Не удалось загрузить test.properties", e);
         }
     }
 

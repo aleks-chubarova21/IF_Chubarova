@@ -1,37 +1,71 @@
-# Файлы IDE
+### IDE ###
+# IntelliJ IDEA
 .idea/
 *.iml
 *.iws
 *.ipr
-.vscode/
+*.idea
+.idea_modules/
+
+# Eclipse
 .settings/
 .classpath
 .project
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
 
-# Файлы сборки
+# VS Code
+.vscode/
+*.code-workspace
+
+### Build ###
+# Maven
 target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Gradle
+.gradle/
 build/
 out/
 bin/
-*.class
-*.jar
-*.war
-*.ear
 
-# Логи и временные файлы
+### Logs ###
 *.log
-*.tmp
-*.temp
-*.cache
+logs/
+*.logs
 
-# Исключения для исходного кода
+### System ###
+.DS_Store
+Thumbs.db
+
+### Test reports ###
+allure-results/
+allure-report/
+test-output/
+surefire-reports/
+failsafe-reports/
+
+### Environment ###
+.env
+*.env
+
+### Exceptions ###
 !src/main/java/
 !src/main/resources/
 !src/test/java/
 !src/test/resources/
-
-# Важные файлы проекта
 !pom.xml
 !README.md
-!.gitignore
 !*.md
+!.gitignore
