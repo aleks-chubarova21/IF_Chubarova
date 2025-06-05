@@ -1,38 +1,47 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# Файлы IDE
+.idea/
 *.iml
+*.iws
 *.ipr
-
-### Eclipse ###
-.apt_generated
+.vscode/
+.settings/
 .classpath
-.factorypath
 .project
-.settings
+.factorypath
 .springBeans
 .sts4-cache
-
-### NetBeans ###
 /nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+
+# Файлы сборки (Maven/Gradle)
+target/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+out/
+bin/
+*.class
+*.jar
+*.war
+*.ear
 
-### VS Code ###
-.vscode/
+# Исключения для Maven/Gradle Wrapper JARs within build dirs
+!.mvn/wrapper/maven-wrapper.jar
 
-### Mac OS ###
+# Логи и временные файлы
+*.log
+*.tmp
+*.temp
+*.cache
+hs_err_pid*.log
+*.hprof
+
+# Операционные системы
 .DS_Store
+Thumbs.db
+
+# Allure reports
+.allure/ # Add this line
+
+# Важные файлы проекта
+!pom.xml
+!README.md
+!.gitignore
+!*.md
